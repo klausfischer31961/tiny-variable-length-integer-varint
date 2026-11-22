@@ -33,3 +33,10 @@ width. If you need signed values, apply a zigzag transform before encoding and
 reverse it after decoding. The decoder also refuses varints longer than ten
 bytes, which is the maximum needed for a 64-bit value, so a corrupt stream
 raises ``ValueError`` instead of consuming memory without bound.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
